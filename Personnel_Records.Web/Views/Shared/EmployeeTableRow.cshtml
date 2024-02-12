@@ -1,0 +1,44 @@
+﻿@model Employee
+
+<tr>
+	<td scope="row">
+		@Model.Payroll_Number
+	</td>
+	<td>
+		@Model.Forenames
+	</td>
+	<td>
+		@Model.Surname
+	</td>
+	<td>
+		@Model.Date_of_Birth.ToString("MM/dd/yyyy")
+	</td>
+	<td>
+		@Model.Telephone
+	</td>
+	<td>
+		@Model.Mobile
+	</td>
+	<td>
+		@Model.Address
+	</td>
+	<td>
+		@Model.Address_2
+	</td>
+	<td>
+		@Model.Postcode
+	</td>
+	<td>
+		@Model.Email_Home
+	</td>
+	<td>
+		@Model.Start_Date.ToString("MM/dd/yyyy")
+	</td>
+	<td>
+		<button
+			type="button"
+			class="btn btn-primary">
+			Edit
+		</button>
+	</td>
+</tr>

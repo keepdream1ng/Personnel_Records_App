@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Personnel Records";
+}
+@model IEnumerable<Employee>;
+
+<div class="col">
+	<form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+		<div class="row mb-3">
+			<label
+				class="form-label"
+				for="inputFile">
+				Your file with .csv extension:
+			</label>
+			<input
+				class="form-control"
+				type="file"
+				name="postedFile"
+				accept=".csv"
+				id="inputFile"/>
+		</div>
+		<div class="row">
+			<button
+				class="btn btn-primary"
+				type="submit">
+				Upload
+			</button>
+		</div>
+	</form>
+</div>
+
+@if (Model is not null)
+{
+	@await Html.PartialAsync("EmployeeTable", Model)
+}
