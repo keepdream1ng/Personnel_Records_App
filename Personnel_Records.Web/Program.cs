@@ -1,3 +1,4 @@
+using Personnel_Records.BLL.Services;
 namespace Personnel_Records.Web;
 
 public class Program
@@ -8,6 +9,7 @@ public class Program
 
 		// Add services to the container.
 		builder.Services.AddControllersWithViews();
+		builder.Services.AddTransient<ICsvService, CsvService>();
 
 		var app = builder.Build();
 
