@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Personnel_Records.BLL\Personnel_Records.BLL.csproj" />
+    <ProjectReference Include="..\Personnel_Records.DAL\Personnel_Records.DAL.csproj" />
   </ItemGroup>
 
 </Project>
