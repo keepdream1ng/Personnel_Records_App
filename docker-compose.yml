@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  personnel_records.web:
+    image: ${DOCKER_REGISTRY-}personnelrecordsweb
+    container_name: personnel_records.app
+    build:
+      context: .
+      dockerfile: Personnel_Records.Web/Dockerfile
+    ports:
+    - "8080:8080"
+    - "8081:8081"
+
+  personnel_records.database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: personnel_records.database
+    environment:
+    - MSSQL_PID=Express 
+    - ACCEPT_EULA=Y
+    - MSSQL_SA_PASSWORD=Password1sSafe!
+    ports:
+    - "1433:1433"
