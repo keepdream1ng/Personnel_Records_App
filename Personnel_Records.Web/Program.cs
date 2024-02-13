@@ -1,4 +1,5 @@
 using Personnel_Records.BLL.Services;
+using Personnel_Records.DAL;
 namespace Personnel_Records.Web;
 
 public class Program
@@ -8,6 +9,8 @@ public class Program
 		var builder = WebApplication.CreateBuilder(args);
 
 		// Add services to the container.
+		string connection = builder.Configuration.GetConnectionString("DefaultConnection")!;
+		builder.Services.AddDataAccessLevelServices(connection);
 		builder.Services.AddControllersWithViews();
 		builder.Services.AddTransient<ICsvService, CsvService>();
 
@@ -17,10 +20,10 @@ public class Program
 		if (!app.Environment.IsDevelopment())
 		{
 			app.UseExceptionHandler("/Home/Error");
-			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 			app.UseHsts();
 		}
 
+		app.Services.MigrateDatabase();
 		app.UseHttpsRedirection();
 		app.UseStaticFiles();
 
