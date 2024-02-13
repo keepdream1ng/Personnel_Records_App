@@ -1,10 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Personnel Records";
-}
-@model IEnumerable<Employee>;
+﻿@model IEnumerable<Employee>;
 
 <div class="col">
 	<form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
 		<div class="row mb-3">
 			<label
 				class="form-label"
@@ -26,9 +24,10 @@
 			</button>
 		</div>
 	</form>
+
+	@if (Model is not null)
+	{
+		@await Html.PartialAsync("EmployeeTable", Model)
+	}
 </div>
 
-@if (Model is not null)
-{
-	@await Html.PartialAsync("EmployeeTable", Model)
-}

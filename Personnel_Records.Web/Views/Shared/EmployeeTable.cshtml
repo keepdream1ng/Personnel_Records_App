@@ -1,55 +1,165 @@
 ﻿@model IEnumerable<Employee>;
+
 <h4
 	class="mt-2">
 	Personnel records
 </h4>
+<div class="row mt-2">
+	<input
+		type="text"
+		class="form-control"
+		placeholder="Search"
+		id="searchInput"/>
+</div>
 <table
 	class="table table-striped"
 	>
-	<tr>
-		<th scope="col">
-			Payroll Number
-		</th>
-		<th scope="col">
-			Forenames
-		</th>
-		<th scope="col">
-			Surname
-		</th>
-		<th scope="col">
-			Date of Birth
-		</th>
-		<th scope="col">
-			Telephone
-		</th>
-		<th scope="col">
-			Mobile
-		</th>
-		<th scope="col">
-			Address
-		</th>
-		<th scope="col">
-			Address2
-		</th>
-		<th scope="col">
-			Postcode
-		</th>
-		<th scope="col">
-			Email Home
-		</th>
-		<th scope="col">
-			Start Date
-		</th>
-		<th scope="col">
-			Action
-		</th>
-	</tr>
-	@foreach (Employee emp in Model)
-	{
-		@await Html.PartialAsync("EmployeeTableRow", emp)
-	}
+	<thead>
+		<tr>
+			<th scope="col">
+				Payroll Number
+			</th>
+			<th scope="col">
+				Forenames
+			</th>
+			<th scope="col">
+				Surname
+			</th>
+			<th scope="col">
+				Date of Birth
+			</th>
+			<th scope="col">
+				Telephone
+			</th>
+			<th scope="col">
+				Mobile
+			</th>
+			<th scope="col">
+				Address
+			</th>
+			<th scope="col">
+				Address2
+			</th>
+			<th scope="col">
+				Postcode
+			</th>
+			<th scope="col">
+				Email Home
+			</th>
+			<th scope="col">
+				Start Date
+			</th>
+			<th scope="col">
+				Action
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (Employee emp in Model)
+		{
+			@await Html.PartialAsync("EmployeeTableRow", emp)
+		}
+	</tbody>
 </table>
 
-@section scripts{
+<script>
+	const table = document.querySelector('.table'); // Get the table element
+	const searchInput = document.getElementById('searchInput');
 
-}
+	// Add event listener to search input on change
+	searchInput.addEventListener('input', () => {
+	  const searchTerm = searchInput.value.toLowerCase(); // Get and lowercase search term
+	  
+	  // Filter table rows
+	  const rows = table.querySelectorAll('tbody tr');
+	  rows.forEach(row => {
+		const cells = row.querySelectorAll('td');
+		let matchFound = false;
+		
+		// Check if any cell content matches search term
+		for (let i = 0; i < cells.length; i++) {
+		  const cellText = cells[i].textContent.trim().toLowerCase();
+		  if (cellText.includes(searchTerm)) {
+			matchFound = true;
+			break; // Stop searching if a match is found
+		  }
+		}
+		
+		// Show/hide row based on match
+		row.style.display = matchFound ? 'table-row' : 'none';
+	  });
+	});
+
+	table.addEventListener('click', (event) => {
+	  const clickedElement = event.target;
+
+	  // Check if clicked element is a table header (`th`)
+	  if (clickedElement.tagName === 'TH') {
+		const sortColumn = clickedElement.innerText.toLowerCase(); // Get the clicked column name
+		const currentSort = clickedElement.getAttribute('data-sort'); // Get current sort direction
+		let newSort = 'asc'; // Default new sort direction
+
+		// Toggle sort direction based on current state
+		if (currentSort === 'asc') {
+		  newSort = 'desc';
+		} else if (currentSort === 'desc') {
+		  newSort = ''; // Remove sorting
+		}
+
+		// Update data-sort attribute on clicked header
+		clickedElement.setAttribute('data-sort', newSort);
+
+		// Sort the table data
+		sortTableData(sortColumn, newSort);
+	  }
+	});
+
+	function sortTableData(column, direction) {
+	  // Get all table rows (`tr`) except the header row
+	  const rows = table.querySelectorAll('tbody tr');
+
+	  // Convert rows to an array for sorting
+	  const sortedRows = Array.from(rows);
+
+	  // Define sorting function based on column and direction
+	  const sortFunction = (row1, row2) => {
+		const cell1 = row1.querySelector(`td:nth-child(${columnIndex(column)})`).textContent.trim();
+		const cell2 = row2.querySelector(`td:nth-child(${columnIndex(column)})`).textContent.trim();
+
+		if (direction === 'asc') {
+		  return compareValues(cell1, cell2);
+		} else if (direction === 'desc') {
+		  return compareValues(cell2, cell1);
+		} else {
+		  return 0; // No sorting
+		}
+	  };
+
+	  // Helper function to get cell index based on column name
+	  function columnIndex(columnName) {
+		const headerCells = table.querySelectorAll('th');
+		for (let i = 0; i < headerCells.length; i++) {
+		  if (headerCells[i].innerText.toLowerCase() === columnName) {
+			return i + 1; // +1 to account for zero-based indexing
+		  }
+		}
+		return -1; // Column not found
+	  }
+
+	  // Helper function to compare cell values (alphabetical or numerical)
+	  function compareValues(value1, value2) {
+		if (isNaN(value1) && isNaN(value2)) {
+		  return value1.localeCompare(value2); // Alphabetical comparison
+		} else {
+		  return Number(value1) - Number(value2); // Numerical comparison
+		}
+	  }
+
+	  // Sort the table rows
+	  sortedRows.sort(sortFunction);
+
+	  // Clear and re-insert sorted rows into the table body
+	  table.querySelector('tbody').innerHTML = '';
+	  sortedRows.forEach(row => table.querySelector('tbody').appendChild(row));
+	}
+</script>
