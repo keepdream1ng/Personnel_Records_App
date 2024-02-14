@@ -6,7 +6,7 @@ public class Employee
 {
 	[Required]
 	[Name("Personnel_Records.Payroll_Number")]
-	public string Payroll_Number { get; set; }
+	public string PayrollNumber { get; set; }
 
 	[Required]
 	[Name("Personnel_Records.Forenames")]
@@ -18,7 +18,7 @@ public class Employee
 
 	[Required]
 	[Name("Personnel_Records.Date_of_Birth")]
-	public DateTime Date_of_Birth { get; set; }
+	public DateTime DateOfBirth { get; set; }
 
 	[Required]
 	[Name("Personnel_Records.Telephone")]
@@ -34,7 +34,7 @@ public class Employee
 
 	[Required]
 	[Name("Personnel_Records.Address_2")]
-	public string Address_2 { get; set; }
+	public string Address2 { get; set; }
 
 	[Required]
 	[Name("Personnel_Records.Postcode")]
@@ -42,9 +42,9 @@ public class Employee
 
 	[Required]
 	[Name("Personnel_Records.EMail_Home")]
-	public string Email_Home { get; set; }
+	public string EmailHome { get; set; }
 
 	[Required]
 	[Name("Personnel_Records.Start_Date")]
-	public DateTime Start_Date { get; set; }
+	public DateTime StartDate { get; set; }
 }

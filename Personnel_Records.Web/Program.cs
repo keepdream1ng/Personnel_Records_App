@@ -1,5 +1,7 @@
+using Personnel_Records.BLL.Interfaces;
 using Personnel_Records.BLL.Services;
 using Personnel_Records.DAL;
+using Personnel_Records.DAL.Repositories;
 namespace Personnel_Records.Web;
 
 public class Program
@@ -13,6 +15,8 @@ public class Program
 		builder.Services.AddDataAccessLevelServices(connection);
 		builder.Services.AddControllersWithViews();
 		builder.Services.AddTransient<ICsvService, CsvService>();
+		builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+		builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
 		var app = builder.Build();
 

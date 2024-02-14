@@ -1,44 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
+using Personnel_Records.BLL.Interfaces;
 using Personnel_Records.BLL.Models;
-using Personnel_Records.BLL.Services;
 using Personnel_Records.Web.Models;
 using System.Diagnostics;
 using System.Globalization;
 
 namespace Personnel_Records_Web.Controllers;
-public class HomeController : Controller
+public class HomeController(IEmployeeService employeeService) : Controller
 {
-	private readonly ICsvService _csvService;
-
-	public HomeController(ICsvService csvService)
-	{
-		_csvService = csvService;
-	}
-
 	[HttpGet]
-	public IActionResult Index()
+	public async Task<IActionResult> Index()
 	{
-		return View();
+		var employees = await employeeService.GetAllSortedBySurnameAsync();
+		return View(employees);
 	}
 
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public IActionResult Index(IFormFile postedFile)
+	public async Task<IActionResult> Index(IFormFile postedFile)
 	{
-		// Checking if user uploaded a file
-		if (postedFile is null || postedFile.Length == 0)
+		int result = await employeeService.AddEmployeesByFileAsync(postedFile);
+		if (result == 0)
 		{
 			return RedirectToAction("ImportError");
 		}
-
-		List<Employee> employees = new();
-		// Reading data from the uploaded file
-		using (var streamReader = new StreamReader(postedFile.OpenReadStream()))
-		{
-			List<Employee> emp = _csvService.ParseCsv<Employee>(streamReader);
-			employees.AddRange(emp);
-		}
-		return View(employees);
+		return RedirectToAction("Index");
 	}
 
 	[HttpGet]

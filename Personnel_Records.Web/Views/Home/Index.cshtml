@@ -25,7 +25,7 @@
 		</div>
 	</form>
 
-	@if (Model is not null)
+	@if (Model.Any())
 	{
 		@await Html.PartialAsync("EmployeeTable", Model)
 	}
